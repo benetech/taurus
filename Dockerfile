@@ -76,16 +76,8 @@ RUN google-chrome-stable --version && firefox --version && mono --version && nug
   && echo '{"settings": {"artifacts-dir": "/tmp/artifacts"}}' > /etc/bzt.d/90-artifacts-dir.json \
   && bzt -install-tools -v && ls -la /tmp && cat /tmp/jpgc-*.log && ls -la ~/.bzt/jmeter-taurus/*/lib/ext && ls -la ~/.bzt/jmeter-taurus/*/lib/ext/jmeter-plugins-tst-*.jar
 
-RUN bzt /tmp/bzt-src/examples/all-executors.yml -o settings.artifacts-dir=/tmp/all-executors-artifacts -sequential || (\
-  ls -lh /tmp/all-executors-artifacts; \
-  cat /tmp/all-executors-artifacts/nose-0.err; \
-  cat /tmp/all-executors-artifacts/geckodriver.log; \
-  cat /tmp/all-executors-artifacts/processlist.txt; \
-  exit 1)
-
 RUN mkdir /bzt-configs \
   && rm -rf /tmp/* \
   && mkdir /tmp/artifacts
 
 WORKDIR /bzt-configs
-ENTRYPOINT ["sh", "-c", "bzt -l /tmp/artifacts/bzt.log \"$@\"", "ignored"]
